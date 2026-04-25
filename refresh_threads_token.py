@@ -121,7 +121,15 @@ def parse_token_response(response: requests.Response) -> dict:
 
 
 def update_env_value(env_path: Path, key: str, value: str) -> None:
-    lines = env_path.read_text(encoding="utf-8").splitlines()
+    import os
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        return  # Do not attempt to read or write local .env in GitHub Actions
+
+    try:
+        lines = env_path.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError:
+        lines = []
+        
     updated = False
     output = []
 
