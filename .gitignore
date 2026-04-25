@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+post_*.jpg
+log_*.txt
+test_*.txt
+fixed_log.txt
