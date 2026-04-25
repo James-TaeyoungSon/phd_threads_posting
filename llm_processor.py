@@ -50,7 +50,9 @@ def generate_article_threads_content(article):
     Generates a concise summary, opinionated analysis, and a Threads-ready post
     for a source article.
     """
-    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    model = os.getenv("OPENAI_MODEL")
+    if not model or not model.strip():
+        model = "gpt-4o-mini"
     article_text = article.get("text", "")[:12000]
     article_title = article.get("title", "")
     article_url = article.get("url", "")
