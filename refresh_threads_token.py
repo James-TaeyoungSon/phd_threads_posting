@@ -62,6 +62,27 @@ def main() -> None:
     days = round(expires_in / 86400, 1) if expires_in else "unknown"
     print(f"Updated THREADS_ACCESS_TOKEN in {env_path}. Expires in: {days} days")
 
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        gh_pat = os.getenv("GH_PAT")
+        repo = os.getenv("GITHUB_REPOSITORY")
+        if gh_pat and repo:
+            print(f"Updating GitHub Secret for {repo}...")
+            import subprocess
+            try:
+                process = subprocess.Popen(
+                    ["gh", "secret", "set", "THREADS_ACCESS_TOKEN", "--repo", repo],
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True
+                )
+                stdout, stderr = process.communicate(input=new_token)
+                if process.returncode == 0:
+                    print("GitHub Secret THREADS_ACCESS_TOKEN successfully updated!")
+                else:
+                    print(f"Failed to update GitHub Secret: {stderr}")
+            except Exception as e:
+                print(f"Error updating GitHub Secret: {e}")
 
 def exchange_short_lived_token(token: str, app_secret: str) -> dict:
     response = requests.get(
