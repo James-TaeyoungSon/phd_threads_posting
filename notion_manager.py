@@ -341,5 +341,5 @@ def _plain_text(rich_text_items: list[dict[str, Any]]) -> str:
 def _find_url_in_text(value: str) -> str:
     import re
 
-    match = re.search(r"https?://\\S+", value or "")
+    match = re.search(r"https?://\S+", value or "")
     return match.group(0).rstrip(").,]") if match else ""

@@ -1,10 +1,15 @@
 import feedparser
 
-def fetch_latest_news(limit=5):
+def fetch_latest_news(limit=10, query="AI"):
     """
-    Fetches the latest general news from Google News Korea RSS feed.
+    Fetches the latest news matching a query from Google News Korea RSS feed.
     """
-    url = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
+    import urllib.parse
+    if query:
+        encoded_query = urllib.parse.quote(query)
+        url = f"https://news.google.com/rss/search?q={encoded_query}&hl=ko&gl=KR&ceid=KR:ko"
+    else:
+        url = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
     feed = feedparser.parse(url)
     
     news_items = []
